@@ -1,13 +1,15 @@
 package org.pro.springorder;
 
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
+
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * 각각 레포지터리, 서비스 간 의존 관계 맺는 담당
- */
-public class OrderContext {
+@Configurable
+public class AppConfiguration {
 
+    @Bean
     public VoucherRepository voucherRepository() {
         return new VoucherRepository() {
             @Override
@@ -17,6 +19,7 @@ public class OrderContext {
         };
     }
 
+    @Bean
     public OrderRepository orderRepository() {
         return new OrderRepository() {
             @Override
@@ -25,10 +28,12 @@ public class OrderContext {
         };
     }
 
+    @Bean
     public VoucherService voucherService() {
         return new VoucherService(voucherRepository());
     }
 
+    @Bean
     public OrderService orderService() {
         return new OrderService(voucherService(), orderRepository());
     }
