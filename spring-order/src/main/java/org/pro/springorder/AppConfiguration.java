@@ -1,12 +1,12 @@
 package org.pro.springorder;
 
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Configurable
+@Configuration
 public class AppConfiguration {
 
     @Bean
