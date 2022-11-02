@@ -34,5 +34,7 @@ public class OrderTester {
         Assert.isTrue(
                 order.totalAmount() == 90L,
                 MessageFormat.format("totalAmount {0} is not 90",  order.totalAmount()));
+
+        applicationContext.close();
     }
 }
