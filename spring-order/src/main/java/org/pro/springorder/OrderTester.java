@@ -20,7 +20,12 @@ public class OrderTester {
 
         var customerId = UUID.randomUUID();
         var voucherRepository = BeanFactoryAnnotationUtils.qualifiedBeanOfType(applicationContext.getBeanFactory(), VoucherRepository.class, "memory");
-//        var voucherRepository = applicationContext.getBean(VoucherRepository.class);
+        var voucherRepository2 = BeanFactoryAnnotationUtils.qualifiedBeanOfType(applicationContext.getBeanFactory(), VoucherRepository.class, "memory");
+
+        System.out.println(MessageFormat.format("voucherRepository {0}", voucherRepository));
+        System.out.println(MessageFormat.format("voucherRepository2 {0}", voucherRepository2));
+        System.out.println(MessageFormat.format("voucherRepository == voucherRepository2 => {0}", voucherRepository == voucherRepository2));
+
         Voucher voucher = voucherRepository.insert(new FixedAmountVoucher(UUID.randomUUID(), 10L));
         var orderService = applicationContext.getBean(OrderService.class);
         var order = orderService.createOrder(customerId, new ArrayList<OrderItem>() {{
