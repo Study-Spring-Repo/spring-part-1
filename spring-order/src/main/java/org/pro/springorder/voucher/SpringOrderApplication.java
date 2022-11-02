@@ -1,4 +1,4 @@
-package org.pro.springorder;
+package org.pro.springorder.voucher;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

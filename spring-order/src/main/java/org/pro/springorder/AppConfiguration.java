@@ -1,40 +1,18 @@
 package org.pro.springorder;
 
-import org.springframework.context.annotation.Bean;
+import org.pro.springorder.order.Order;
+import org.pro.springorder.voucher.MemoryVoucherRepository;
+import org.pro.springorder.voucher.Voucher;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Optional;
-import java.util.UUID;
+import org.springframework.context.annotation.FilterType;
 
 @Configuration
+//@ComponentScan(basePackages = {"org.pro.springorder.order", "org.pro.springorder.voucher"})
+//@ComponentScan(basePackageClasses = {Order.class, Voucher.class})
+@ComponentScan(
+        basePackages = {"org.pro.springorder.order", "org.pro.springorder.voucher"},
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = MemoryVoucherRepository.class)})
 public class AppConfiguration {
 
-    @Bean
-    public VoucherRepository voucherRepository() {
-        return new VoucherRepository() {
-            @Override
-            public Optional<Voucher> findById(UUID voucherId) {
-                return Optional.empty();
-            }
-        };
-    }
-
-    @Bean
-    public OrderRepository orderRepository() {
-        return new OrderRepository() {
-            @Override
-            public void insert(Order order) {
-            }
-        };
-    }
-
-    @Bean
-    public VoucherService voucherService(VoucherRepository voucherRepository) {
-        return new VoucherService(voucherRepository);
-    }
-
-    @Bean
-    public OrderService orderService(VoucherService voucherService, OrderRepository orderRepository) {
-        return new OrderService(voucherService, orderRepository);
-    }
 }

@@ -1,4 +1,4 @@
-package org.pro.springorder;
+package org.pro.springorder.order;
 
 import java.util.UUID;
 

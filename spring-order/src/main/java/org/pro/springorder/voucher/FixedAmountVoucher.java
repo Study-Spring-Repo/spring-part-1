@@ -1,4 +1,4 @@
-package org.pro.springorder;
+package org.pro.springorder.voucher;
 
 import java.util.UUID;
 

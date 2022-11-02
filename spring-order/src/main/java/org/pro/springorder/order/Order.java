@@ -1,4 +1,6 @@
-package org.pro.springorder;
+package org.pro.springorder.order;
+
+import org.pro.springorder.voucher.Voucher;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -35,5 +37,9 @@ public class Order {
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public UUID getOrderId() {
+        return orderId;
     }
 }

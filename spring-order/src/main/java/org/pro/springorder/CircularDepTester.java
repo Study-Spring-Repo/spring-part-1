@@ -1,7 +1,5 @@
 package org.pro.springorder;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,7 +36,7 @@ class CircularConfig {
 public class CircularDepTester {
 
     public static void main(String[] args) {
-        ApplicationContext ac = new AnnotationConfigApplicationContext(CircularConfig.class);
+//        ApplicationContext ac = new AnnotationConfigApplicationContext(CircularConfig.class);
 
 
     }
