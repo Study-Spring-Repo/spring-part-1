@@ -1,7 +1,5 @@
 package org.pro.springorder.order;
 
-import org.pro.springorder.order.Order;
-import org.pro.springorder.order.OrderRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;

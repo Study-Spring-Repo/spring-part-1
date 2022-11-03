@@ -4,9 +4,9 @@ import org.pro.springorder.order.OrderItem;
 import org.pro.springorder.order.OrderProperties;
 import org.pro.springorder.order.OrderService;
 import org.pro.springorder.voucher.FixedAmountVoucher;
+import org.pro.springorder.voucher.JdbcVoucherRepository;
 import org.pro.springorder.voucher.VoucherRepository;
-import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.boot.SpringApplication;
 import org.springframework.util.Assert;
 
 import java.text.MessageFormat;
@@ -16,17 +16,11 @@ import java.util.UUID;
 public class OrderTester {
 
     public static void main(String[] args) {
-        var applicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        var springApplication = new SpringApplication(ProApplication.class);
+//        springApplication.setAdditionalProfiles("local");
+        var applicationContext = springApplication.run(args);
+//        var applicationContext = new AnnotationConfigApplicationContext();
 
-//        var environment = applicationContext.getEnvironment();
-//        var version = environment.getProperty("example.version");
-//        var minimumOrderAmount = environment.getProperty("example.minimum-order-amount");
-//        var supportVendors = environment.getProperty("example.support-vendors", List.class);
-//        var description = environment.getProperty("example.description", List.class);
-//        System.out.println(MessageFormat.format("version = {0}", version));
-//        System.out.println(MessageFormat.format("minimumOrderAmount = {0}", minimumOrderAmount));
-//        System.out.println(MessageFormat.format("supportVendors = {0}", supportVendors));
-//        System.out.println(MessageFormat.format("description = {0}", description));
         var orderProperties = applicationContext.getBean(OrderProperties.class);
         System.out.println(MessageFormat.format("version = {0}", orderProperties.getVersion()));
         System.out.println(MessageFormat.format("minimumOrderAmount = {0}", orderProperties.getMinimumOrderAmount()));
@@ -34,8 +28,11 @@ public class OrderTester {
         System.out.println(MessageFormat.format("description = {0}", orderProperties.getDescription()));
 
         var customerId = UUID.randomUUID();
-        var voucherRepository = BeanFactoryAnnotationUtils.qualifiedBeanOfType(applicationContext.getBeanFactory(), VoucherRepository.class, "memory");
+        var voucherRepository = applicationContext.getBean(VoucherRepository.class);
         var voucher = voucherRepository.insert(new FixedAmountVoucher(UUID.randomUUID(), 10L));
+
+        System.out.println(MessageFormat.format("is Jdbc Repo -> {0}", voucherRepository instanceof JdbcVoucherRepository));
+        System.out.println(MessageFormat.format("is Jdbc Repo -> {0}", voucherRepository.getClass().getCanonicalName()));
 
         var orderService = applicationContext.getBean(OrderService.class);
         var order = orderService.createOrder(customerId, new ArrayList<OrderItem>() {{
