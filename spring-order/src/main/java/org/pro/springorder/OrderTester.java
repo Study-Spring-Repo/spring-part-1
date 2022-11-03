@@ -11,12 +11,21 @@ import org.springframework.util.Assert;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class OrderTester {
 
     public static void main(String[] args) {
         var applicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
+
+        var environment = applicationContext.getEnvironment();
+        var version = environment.getProperty("example.version");
+        var minimumOrderAmount = environment.getProperty("example.minimum-order-amount");
+        var supportVendors = environment.getProperty("example.support-vendors", List.class);
+        System.out.println(MessageFormat.format("version = {0}", version));
+        System.out.println(MessageFormat.format("minimumOrderAmount = {0}", minimumOrderAmount));
+        System.out.println(MessageFormat.format("supportVendors = {0}", supportVendors));
 
         var customerId = UUID.randomUUID();
         var voucherRepository = BeanFactoryAnnotationUtils.qualifiedBeanOfType(applicationContext.getBeanFactory(), VoucherRepository.class, "memory");

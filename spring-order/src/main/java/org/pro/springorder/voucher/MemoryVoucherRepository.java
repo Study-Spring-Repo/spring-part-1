@@ -17,7 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 @Qualifier("memory")
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class MemoryVoucherRepository implements VoucherRepository, InitializingBean, DisposableBean {
+public class MemoryVoucherRepository implements VoucherRepository {
+        //, InitializingBean, DisposableBean {
 
     private final Map<UUID, Voucher> storage = new ConcurrentHashMap<>();
 
@@ -32,23 +33,23 @@ public class MemoryVoucherRepository implements VoucherRepository, InitializingB
         return voucher;
     }
 
-    @PostConstruct
-    public void postConstruct() {
-        System.out.println("postConstruct called !");
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        System.out.println("afterPropertiesSet called !");
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        System.out.println("destroy called !");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        System.out.println("preDestroy called !");
-    }
+//    @PostConstruct
+//    public void postConstruct() {
+//        System.out.println("postConstruct called !");
+//    }
+//
+//    @Override
+//    public void afterPropertiesSet() throws Exception {
+//        System.out.println("afterPropertiesSet called !");
+//    }
+//
+//    @Override
+//    public void destroy() throws Exception {
+//        System.out.println("destroy called !");
+//    }
+//
+//    @PreDestroy
+//    public void preDestroy() {
+//        System.out.println("preDestroy called !");
+//    }
 }
