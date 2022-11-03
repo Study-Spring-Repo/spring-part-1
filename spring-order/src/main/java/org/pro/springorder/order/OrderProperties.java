@@ -2,31 +2,68 @@ package org.pro.springorder.order;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import java.text.MessageFormat;
 import java.util.List;
 
-@Component
+@Configuration
+@ConfigurationProperties(prefix = "example")
 public class OrderProperties implements InitializingBean {
 
-    @Value("${example.version:v0.0.0}")
     private String version;
 
-    @Value("${example.minimum-order-amount}")
-    private String minimumOrderAmount;
+    private int minimumOrderAmount;
 
-    @Value("${example.support-vendors}") // 타입 변화 가능한 것만 가능
     private List<String> supportVendors;
 
+    private String description;
+
 //    @Value("${JAVA_HOME}")
-//    private String javaHome;
+    private String javaHome;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         System.out.println(MessageFormat.format("[OrderProperties] version = {0}", version));
         System.out.println(MessageFormat.format("[OrderProperties] minimumOrderAmount = {0}", minimumOrderAmount));
         System.out.println(MessageFormat.format("[OrderProperties] supportVendors = {0}", supportVendors));
-//        System.out.println(MessageFormat.format("[OrderProperties] javaHome = {0}", javaHome));
+        System.out.println(MessageFormat.format("[OrderProperties] javaHome = {0}", javaHome));
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public int getMinimumOrderAmount() {
+        return minimumOrderAmount;
+    }
+
+    public void setMinimumOrderAmount(int minimumOrderAmount) {
+        this.minimumOrderAmount = minimumOrderAmount;
+    }
+
+    public List<String> getSupportVendors() {
+        return supportVendors;
+    }
+
+    public void setSupportVendors(List<String> supportVendors) {
+        this.supportVendors = supportVendors;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getJavaHome() {
+        return javaHome;
     }
 }

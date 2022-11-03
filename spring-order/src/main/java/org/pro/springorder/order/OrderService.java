@@ -1,6 +1,5 @@
 package org.pro.springorder.order;
 
-import org.pro.springorder.configuration.VersionProvider;
 import org.pro.springorder.voucher.VoucherService;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +11,10 @@ public class OrderService {
 
     private final VoucherService voucherService;
     private final OrderRepository orderRepository;
-    private final VersionProvider versionProvider;
 
-    public OrderService(VoucherService voucherService, OrderRepository orderRepository, VersionProvider versionProvider) {
+    public OrderService(VoucherService voucherService, OrderRepository orderRepository) {
         this.voucherService = voucherService;
         this.orderRepository = orderRepository;
-        this.versionProvider = versionProvider;
     }
 
     public Order createOrder(UUID customerId, List<OrderItem> orderItems) {
@@ -26,7 +23,6 @@ public class OrderService {
     }
 
     public Order createOrder(UUID customerId, List<OrderItem> orderItems, UUID voucherId) {
-        versionProvider.getVersion();
         var voucher = voucherService.getVoucher(voucherId);
         var order = new Order(UUID.randomUUID(), customerId, orderItems, voucher);
         orderRepository.insert(order);
