@@ -1,5 +1,7 @@
 package org.pro.springorder.order;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,8 @@ import java.util.List;
 @ConfigurationProperties(prefix = "example")
 public class OrderProperties implements InitializingBean {
 
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderProperties.class);
     private String version;
 
     private int minimumOrderAmount;
@@ -24,10 +28,10 @@ public class OrderProperties implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println(MessageFormat.format("[OrderProperties] version = {0}", version));
-        System.out.println(MessageFormat.format("[OrderProperties] minimumOrderAmount = {0}", minimumOrderAmount));
-        System.out.println(MessageFormat.format("[OrderProperties] supportVendors = {0}", supportVendors));
-        System.out.println(MessageFormat.format("[OrderProperties] javaHome = {0}", javaHome));
+        logger.debug("[OrderProperties] version = {}", version);
+        logger.debug("[OrderProperties] minimumOrderAmount = {}", minimumOrderAmount);
+        logger.debug("[OrderProperties] supportVendors = {}", supportVendors);
+        logger.debug("[OrderProperties] javaHome = {}", javaHome);
     }
 
     public String getVersion() {
