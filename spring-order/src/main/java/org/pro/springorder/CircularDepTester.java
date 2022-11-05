@@ -19,7 +19,7 @@ class B {
     }
 }
 
-@Configuration
+//@Configuration
 class CircularConfig {
 
     @Bean
