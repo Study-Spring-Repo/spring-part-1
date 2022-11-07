@@ -1,6 +1,7 @@
 package org.pro.springorder.order;
 
 import org.pro.springorder.voucher.VoucherService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class OrderService {
     private final VoucherService voucherService;
     private final OrderRepository orderRepository;
 
+    @Autowired
     public OrderService(VoucherService voucherService, OrderRepository orderRepository) {
         this.voucherService = voucherService;
         this.orderRepository = orderRepository;

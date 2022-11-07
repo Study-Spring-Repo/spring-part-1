@@ -7,7 +7,6 @@ import org.pro.springorder.voucher.FixedAmountVoucher;
 import org.pro.springorder.voucher.VoucherRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils;
 import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.util.Assert;
@@ -55,7 +54,8 @@ public class OrderTester {
 
 
         var customerId = UUID.randomUUID();
-        var voucherRepository = BeanFactoryAnnotationUtils.qualifiedBeanOfType(applicationContext.getBeanFactory(), VoucherRepository.class, "memory");
+//        var voucherRepository = BeanFactoryAnnotationUtils.qualifiedBeanOfType(applicationContext.getBeanFactory(), VoucherRepository.class, "local");
+        var voucherRepository = applicationContext.getBean(VoucherRepository.class);
         var voucher = voucherRepository.insert(new FixedAmountVoucher(UUID.randomUUID(), 10L));
 //
 //        System.out.println(MessageFormat.format("is Jdbc Repo -> {0}", voucherRepository instanceof JdbcVoucherRepository));

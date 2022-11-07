@@ -13,6 +13,7 @@ public class ProApplication {
 
     public static void main(String[] args) {
         var applicationContext = SpringApplication.run(ProApplication.class, args);
+//        applicationContext.getEnvironment().addActiveProfile("local");
         var orderProperties = applicationContext.getBean(OrderProperties.class);
         logger.warn("logger name => {}" + logger.getName());
         logger.warn("version = {}", orderProperties.getVersion());
