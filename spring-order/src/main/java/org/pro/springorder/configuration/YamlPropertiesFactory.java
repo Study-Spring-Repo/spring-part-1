@@ -1,4 +1,4 @@
-package org.pro.springorder;
+package org.pro.springorder.configuration;
 
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.core.env.PropertiesPropertySource;

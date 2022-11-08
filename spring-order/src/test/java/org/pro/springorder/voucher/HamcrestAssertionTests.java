@@ -5,9 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class HamcrestAssertionTests {
 
@@ -28,9 +30,17 @@ public class HamcrestAssertionTests {
     @DisplayName("컬렉션에 대한 matcher 테스트")
     void hamcrestListMatcherTest() {
         var prices = List.of(2, 3, 4);
+
+        // Hamcrest
         assertThat(prices, hasSize(3));
         assertThat(prices, everyItem(greaterThan(1)));
         assertThat(prices, containsInAnyOrder(3, 4, 2));
         assertThat(prices, hasItem(greaterThanOrEqualTo(2)));
+
+        // AssertJ
+        assertThat(prices).hasSize(3);
+        assertThat(prices).allSatisfy(price -> assertThat(price).isGreaterThan(1));
+        assertThat(prices).containsExactlyInAnyOrder(3, 4, 2);
+        assertThat(prices).allSatisfy(price -> assertThat(price).isGreaterThanOrEqualTo(price));
     }
 }
