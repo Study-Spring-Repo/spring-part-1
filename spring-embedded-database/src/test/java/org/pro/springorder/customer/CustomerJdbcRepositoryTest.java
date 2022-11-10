@@ -1,5 +1,6 @@
 package org.pro.springorder.customer;
 
+import com.wix.mysql.EmbeddedMysql;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,11 @@ import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.wix.mysql.EmbeddedMysql.anEmbeddedMysql;
+import static com.wix.mysql.ScriptResolver.classPathScript;
+import static com.wix.mysql.config.Charset.UTF8;
+import static com.wix.mysql.config.MysqldConfig.aMysqldConfig;
+import static com.wix.mysql.distribution.Version.v8_0_11;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -30,9 +36,9 @@ class CustomerJdbcRepositoryTest {
         @Bean
         public DataSource dataSource() {
             var dataSource = DataSourceBuilder.create()
-                    .url("jdbc:mysql://localhost/order_mgmt")
-                    .username("root")
-                    .password("root1234!")
+                    .url("jdbc:mysql://localhost:2215/test-order_mgmt")
+                    .username("test")
+                    .password("test1234!")
                     .type(HikariDataSource.class)
                     .build();
             dataSource.setMaximumPoolSize(1000);
@@ -49,10 +55,25 @@ class CustomerJdbcRepositoryTest {
 
     Customer newCustomer;
 
+    EmbeddedMysql embeddedMysql;
+
     @BeforeAll
     void clean() {
         newCustomer = new Customer(UUID.randomUUID(), "test-user", "test-user@gmail.com", LocalDateTime.now());
-        customerJdbcRepository.deleteAll();
+        var mysqlConfig = aMysqldConfig(v8_0_11)
+                .withCharset(UTF8)
+                .withPort(2215)
+                .withUser("test", "test1234!")
+                .withTimeZone("Asia/Seoul")
+                .build();
+        embeddedMysql = anEmbeddedMysql(mysqlConfig)
+                .addSchema("test-order_mgmt", classPathScript("./schema.sql"))
+                .start();
+    }
+
+    @AfterAll
+    void cleanup(){
+        embeddedMysql.stop();
     }
 
     @Test
