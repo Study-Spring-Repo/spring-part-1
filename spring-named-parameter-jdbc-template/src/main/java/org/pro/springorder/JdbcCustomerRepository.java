@@ -1,12 +1,15 @@
 package org.pro.springorder;
 
+import org.pro.springorder.customer.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -125,6 +128,42 @@ public class JdbcCustomerRepository {
         return 0;
     }
 
+    public void transactionTest(Customer customer) {
+        String updateNameSql = "UPDATE customers SET name = ? WHERE customer_id = UUID_TO_BIN(?)";
+        String updateEmailSql = "UPDATE customers SET email = ? WHERE customer_id = UUID_TO_BIN(?)";
+
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/order_mgmt", "root", "root1234!");
+            try (
+                    var updateNameStatement = connection.prepareStatement(updateNameSql);
+                    var updateEmailStatement = connection.prepareStatement(updateEmailSql);
+            ) {
+                connection.setAutoCommit(false);
+                updateNameStatement.setString(1, customer.getName());
+                updateNameStatement.setBytes(2, customer.getCustomerId().toString().getBytes(StandardCharsets.UTF_8));
+                updateNameStatement.executeUpdate();
+
+                updateEmailStatement.setString(1, customer.getEmail());
+                updateEmailStatement.setBytes(2, customer.getCustomerId().toString().getBytes(StandardCharsets.UTF_8));
+                updateEmailStatement.executeUpdate();
+                connection.setAutoCommit(true);
+            }
+        } catch (SQLException exception) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                    connection.close();
+                } catch (SQLException throwable) {
+                    logger.error("Got error while closing connection", throwable);
+                    throw new RuntimeException(exception);
+                }
+            }
+             logger.error("Got error while closing connection", exception);
+            throw new RuntimeException(exception);
+        }
+    }
+
     static UUID toUUID(byte[] bytes) {
         var byteBuffer = ByteBuffer.wrap(bytes);
         return new UUID(byteBuffer.getLong(), byteBuffer.getLong());
@@ -133,14 +172,21 @@ public class JdbcCustomerRepository {
     public static void main(String[] args) throws SQLException {
         var customerRepository = new JdbcCustomerRepository();
 
-        var count = customerRepository.deleteAllCustomers();
-        logger.info("deleted count -> {}", count);
+        customerRepository.transactionTest(
+                new Customer(UUID.fromString("9ea89c3a-8cce-4a67-89cf-322f246968a6"), "update-user2", "new-user2@gmail.com", LocalDateTime.now())
+        );
 
-        var customerId = UUID.randomUUID();
-        logger.info("created customerId -> {}", customerId);
-        logger.info("created customerId -> {}", customerId.version());
+//        var customerId = UUID.randomUUID();
+//        customerRepository.insertCustomer(customerId, "new-user2", "new-user2@gmail.com");
 
-        customerRepository.insertCustomer(customerId, "new-user", "new-user@gmail.com");
-        customerRepository.findAllIds().forEach(v -> logger.info("Found customerId : {} and version : {}", v, v.version()));
+//        var count = customerRepository.deleteAllCustomers();
+//        logger.info("deleted count -> {}", count);
+//
+//        var customerId = UUID.randomUUID();
+//        logger.info("created customerId -> {}", customerId);
+//        logger.info("created customerId -> {}", customerId.version());
+//
+//        customerRepository.insertCustomer(customerId, "new-user", "new-user@gmail.com");
+//        customerRepository.findAllIds().forEach(v -> logger.info("Found customerId : {} and version : {}", v, v.version()));
     }
 }
