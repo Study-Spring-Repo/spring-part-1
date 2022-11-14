@@ -6,6 +6,7 @@ import org.pro.springorder.voucher.FixedAmountVoucher;
 import org.pro.springorder.voucher.VoucherRepository;
 import org.pro.springorder.voucher.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,18 +34,10 @@ public class AopTests {
     @Autowired
     VoucherRepository voucherRepository;
 
-//    @Autowired
-//    VoucherService voucherService;
-
     @Test
     @DisplayName("Aop test")
     public void testOrderService() {
         var fixedAmountVoucher = new FixedAmountVoucher(UUID.randomUUID(), 100);
         voucherRepository.insert(fixedAmountVoucher);
-
-//        voucherService.getVoucher(fixedAmountVoucher.getVoucherId());
-
-        VoucherService voucherService = new VoucherService(voucherRepository);
-        voucherService.getVoucher(fixedAmountVoucher.getVoucherId());
     }
 }

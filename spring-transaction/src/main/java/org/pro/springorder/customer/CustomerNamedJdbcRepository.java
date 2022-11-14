@@ -3,14 +3,19 @@ package org.pro.springorder.customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -20,6 +25,8 @@ public class CustomerNamedJdbcRepository implements CustomerRepository {
     private static final Logger logger = LoggerFactory.getLogger(CustomerNamedJdbcRepository.class);
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    private final TransactionTemplate transactionTemplate;
 
     private static RowMapper<Customer> customerRowMapper = (resultSet, i) -> {
         var customerName = resultSet.getString("name");
@@ -32,8 +39,10 @@ public class CustomerNamedJdbcRepository implements CustomerRepository {
     };
 
     @Autowired
-    public CustomerNamedJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    public CustomerNamedJdbcRepository(NamedParameterJdbcTemplate jdbcTemplate, TransactionTemplate transactionTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.transactionTemplate = transactionTemplate;
+
     }
 
     public Map<String, Object> toParamMap(Customer customer) {
@@ -112,6 +121,16 @@ public class CustomerNamedJdbcRepository implements CustomerRepository {
             logger.error("Got empty result", e);
             return Optional.empty();
         }
+    }
+
+    public void testTransaction(Customer customer) {
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                jdbcTemplate.update("UPDATE customers SET name = :name WHERE customer_id = UUID_TO_BIN(:customerId)", toParamMap(customer));
+                jdbcTemplate.update("UPDATE customers SET email = :email WHERE customer_id = UUID_TO_BIN(:customerId)", toParamMap(customer));
+            }
+        });
     }
 
     @Override

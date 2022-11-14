@@ -13,14 +13,13 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
     private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
 
-    @Pointcut("org.pro.springorder.aop.CommonPointcut.repositoryMethodPointcut()")
-    public void servicePublicKMethodPointcut() {};
-
-    @Around("servicePublicKMethodPointcut()")
+    @Around("@annotation(org.pro.springorder.aop.TrackTime)")
     public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
         log.info("Before method called. {}", joinPoint.getSignature().toString());
+        var startTime = System.nanoTime();
         var result = joinPoint.proceed();
-        log.info("After method called with result => {}", result);
+        var endTime = System.nanoTime() - startTime;
+        log.info("After method called with result => {} and time taken by {} nanoseconds", result, endTime);
         return result;
     }
 }
