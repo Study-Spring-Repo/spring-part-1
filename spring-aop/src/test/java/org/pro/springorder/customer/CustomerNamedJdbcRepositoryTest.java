@@ -16,7 +16,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
