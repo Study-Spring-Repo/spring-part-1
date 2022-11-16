@@ -1,6 +1,7 @@
 package org.pro.springorder.servlet;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.pro.springorder.customer.CustomerController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -10,12 +11,14 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -35,9 +38,11 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
 
     @Configuration
     @EnableWebMvc
-    @ComponentScan(basePackages = "org.pro.springorder.customer")
-    @EnableTransactionManagement
-    static class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
+    @ComponentScan(basePackages = "org.pro.springorder.customer",
+            includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = CustomerController.class),
+            useDefaultFilters = false
+    )
+    static class ServletConfig implements WebMvcConfigurer, ApplicationContextAware {
 
         ApplicationContext applicationContext;
 
@@ -102,16 +107,54 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
         }
     }
 
+    @Configuration
+    @ComponentScan(basePackages = "org.pro.springorder.customer",
+            excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = CustomerController.class)
+    )
+    @EnableTransactionManagement
+    static class RootConfig {
+        @Bean
+        public DataSource dataSource() {
+            var dataSource = DataSourceBuilder.create()
+                    .url("jdbc:mysql://localhost/order_mgmt")
+                    .username("root")
+                    .password("root1234!")
+                    .type(HikariDataSource.class)
+                    .build();
+            dataSource.setMaximumPoolSize(1000);
+            dataSource.setMinimumIdle(100);
+            return dataSource;
+        }
+
+        @Bean
+        public JdbcTemplate jdbcTemplate() {
+            return new JdbcTemplate(dataSource());
+        }
+
+        @Bean
+        public NamedParameterJdbcTemplate namedParameterJdbcTemplate(JdbcTemplate jdbcTemplate) {
+            return new NamedParameterJdbcTemplate(jdbcTemplate);
+        }
+
+        @Bean
+        public PlatformTransactionManager platformTransactionManager(DataSource dataSource) {
+            return new DataSourceTransactionManager(dataSource);
+        }
+    }
     @Override
     public void onStartup(ServletContext servletContext) {
-        var applicationContext = new AnnotationConfigWebApplicationContext();
-        applicationContext.register(AppConfig.class);
+        var rootApplicationContext = new AnnotationConfigWebApplicationContext();
+        rootApplicationContext.register(RootConfig.class);
+        var loaderListener = new ContextLoaderListener(rootApplicationContext);
+        servletContext.addListener(loaderListener);
 
-//        var dispatcherServlet = new DispatcherServlet(applicationContext);
+        var applicationContext = new AnnotationConfigWebApplicationContext();
+        applicationContext.register(ServletConfig.class);
+        var dispatcherServlet = new DispatcherServlet(rootApplicationContext);
         logger.info("Starting Server...");
-//        var servletRegistration = servletContext.addServlet("test", dispatcherServlet);
-//        servletRegistration.addMapping("/");
-//        servletRegistration.setLoadOnStartup(1);
+        var servletRegistration = servletContext.addServlet("test", dispatcherServlet);
+        servletRegistration.addMapping("/");
+        servletRegistration.setLoadOnStartup(0);
     }
 
 }
