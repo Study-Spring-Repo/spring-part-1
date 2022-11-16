@@ -55,13 +55,13 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
             var thymeleafViewResolver = new ThymeleafViewResolver();
             thymeleafViewResolver.setTemplateEngine(springTemplateEngine);
             thymeleafViewResolver.setOrder(1);
-            thymeleafViewResolver.setViewNames(new String[]{"views/*"});
+            thymeleafViewResolver.setViewNames(new String[]{"views/"});
             registry.viewResolver(thymeleafViewResolver);
         }
 
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            registry.addResourceHandler("/resources/**")
+            registry.addResourceHandler("/resources/*")
                     .addResourceLocations("/resources/")
                     .setCachePeriod(60)
                     .resourceChain(true)
