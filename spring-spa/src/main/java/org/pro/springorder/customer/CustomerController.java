@@ -1,5 +1,6 @@
 package org.pro.springorder.customer;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +37,9 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/{customerId}")
-    public String findCustomer(@PathVariable UUID customerId, Model model) {
-        var maybeCustomer = customerService.getCustomer(customerId);
-        if (maybeCustomer.isPresent()) {
-            model.addAttribute("customer", maybeCustomer.get());
-            return "views/customer-details";
-        } else {
-            return "views/404";
-        }
+    public ResponseEntity<Customer> findCustomer(@PathVariable("customerId") UUID customerId) {
+        var customer = customerService.getCustomer(customerId);
+        return customer.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/customers/new")
