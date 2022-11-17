@@ -1,0 +1,11 @@
+%PARSER_ERROR[clr] [main] DEBUG o.p.s.order.OrderProperties - [OrderProperties] version = default-v1.0
+%PARSER_ERROR[clr] [main] DEBUG o.p.s.order.OrderProperties - [OrderProperties] minimumOrderAmount = 1
+%PARSER_ERROR[clr] [main] DEBUG o.p.s.order.OrderProperties - [OrderProperties] supportVendors = [a, b, c, d]
+%PARSER_ERROR[clr] [main] DEBUG o.p.s.order.OrderProperties - [OrderProperties] javaHome = null
+%PARSER_ERROR[clr] [main] INFO  org.pro.springorder.OrderTester - logger name => {}org.pro.springorder.OrderTester
+%PARSER_ERROR[clr] [main] INFO  org.pro.springorder.OrderTester - version = default-v1.0
+%PARSER_ERROR[clr] [main] INFO  org.pro.springorder.OrderTester - minimumOrderAmount = 1
+%PARSER_ERROR[clr] [main] INFO  org.pro.springorder.OrderTester - supportVendors = [a, b, c, d]
+%PARSER_ERROR[clr] [main] INFO  org.pro.springorder.OrderTester - description = line 1 hello world
+line 2 xxxx
+line 3
