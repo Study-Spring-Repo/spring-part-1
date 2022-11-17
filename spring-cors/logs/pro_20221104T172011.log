@@ -1,0 +1,11 @@
+17:20:13.218 [main] DEBUG o.p.s.order.OrderProperties - [OrderProperties] version = default-v1.0
+17:20:13.222 [main] DEBUG o.p.s.order.OrderProperties - [OrderProperties] minimumOrderAmount = 1
+17:20:13.222 [main] DEBUG o.p.s.order.OrderProperties - [OrderProperties] supportVendors = [a, b, c, d]
+17:20:13.222 [main] DEBUG o.p.s.order.OrderProperties - [OrderProperties] javaHome = null
+17:20:13.602 [main] INFO  org.pro.springorder.OrderTester - logger name => {}org.pro.springorder.OrderTester
+17:20:13.603 [main] INFO  org.pro.springorder.OrderTester - version = default-v1.0
+17:20:13.603 [main] INFO  org.pro.springorder.OrderTester - minimumOrderAmount = 1
+17:20:13.603 [main] INFO  org.pro.springorder.OrderTester - supportVendors = [a, b, c, d]
+17:20:13.603 [main] INFO  org.pro.springorder.OrderTester - description = line 1 hello world
+line 2 xxxx
+line 3
