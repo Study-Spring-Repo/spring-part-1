@@ -1,20 +1,21 @@
 package org.pro.springorder.customer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
+//@CrossOrigin(origins = "*")
 public class CustomerController {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
@@ -37,9 +38,16 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/{customerId}")
+//  @CrossOrigin(origins = "*")
     public ResponseEntity<Customer> findCustomer(@PathVariable("customerId") UUID customerId) {
         var customer = customerService.getCustomer(customerId);
         return customer.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/customers/{customerId}")
+    public CustomerDto saveCustomer(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDto customer) {
+        logger.info("Got customer save request {}", customer);
+        return customer;
     }
 
     @GetMapping("/customers/new")

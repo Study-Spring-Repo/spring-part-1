@@ -28,10 +28,7 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.resource.EncodedResourceResolver;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
@@ -39,7 +36,6 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -129,6 +125,13 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
             var modules = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
 
             converters.add(1, new MappingJackson2HttpMessageConverter(modules.build()));
+        }
+
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/api/**")
+                    .allowedMethods("GET", "POST")
+                    .allowedOrigins("*");
         }
     }
 
