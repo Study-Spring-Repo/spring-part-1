@@ -1,4 +1,4 @@
-package org.pro.springorder.customer;
+package org.pro.springorder.customer.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

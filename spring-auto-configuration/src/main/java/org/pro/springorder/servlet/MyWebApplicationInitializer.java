@@ -3,7 +3,7 @@ package org.pro.springorder.servlet;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.zaxxer.hikari.HikariDataSource;
-import org.pro.springorder.customer.CustomerController;
+import org.pro.springorder.customer.controller.CustomerController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

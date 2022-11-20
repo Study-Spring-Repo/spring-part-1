@@ -1,5 +1,7 @@
-package org.pro.springorder.customer;
+package org.pro.springorder.customer.controller;
 
+import org.pro.springorder.customer.service.CustomerService;
+import org.pro.springorder.customer.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

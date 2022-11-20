@@ -3,6 +3,8 @@ package org.pro.springorder.customer;
 import com.wix.mysql.EmbeddedMysql;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.*;
+import org.pro.springorder.customer.model.Customer;
+import org.pro.springorder.customer.repository.CustomerJdbcRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;

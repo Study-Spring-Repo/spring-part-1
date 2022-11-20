@@ -1,4 +1,6 @@
-package org.pro.springorder.customer;
+package org.pro.springorder.customer.repository;
+
+import org.pro.springorder.customer.model.Customer;
 
 import java.util.List;
 import java.util.Optional;

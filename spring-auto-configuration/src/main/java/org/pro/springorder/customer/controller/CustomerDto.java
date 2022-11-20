@@ -1,4 +1,6 @@
-package org.pro.springorder.customer;
+package org.pro.springorder.customer.controller;
+
+import org.pro.springorder.customer.model.Customer;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

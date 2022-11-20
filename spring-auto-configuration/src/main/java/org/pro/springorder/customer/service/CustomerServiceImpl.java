@@ -1,5 +1,7 @@
-package org.pro.springorder.customer;
+package org.pro.springorder.customer.service;
 
+import org.pro.springorder.customer.model.Customer;
+import org.pro.springorder.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

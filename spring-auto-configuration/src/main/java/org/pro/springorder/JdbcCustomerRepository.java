@@ -1,6 +1,6 @@
 package org.pro.springorder;
 
-import org.pro.springorder.customer.Customer;
+import org.pro.springorder.customer.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
